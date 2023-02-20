@@ -1,9 +1,10 @@
 
+from treeComponents import Nodo
+
 class Compilador:
     def __init__(self, regex):
         self.regex = regex
         self.sims = {'(': 1, '|': 2, '.': 3, '?': 4, '*': 4, '+': 4}
-
 
     def concat(self):
         newRegex = ""
@@ -21,7 +22,6 @@ class Compilador:
         newRegex += self.regex[-1]
         return newRegex
 
-
     def infix_postfix(self):
         postfix, stack = "", []
         concatExp = self.concat()
@@ -35,7 +35,6 @@ class Compilador:
                     poppedValue = stack.pop(0)
                     postfix += poppedValue
                 stack.pop(0)
-
             else:
                 while stack:
                     topValKey = stack[0]
@@ -52,5 +51,23 @@ class Compilador:
             postfix += stack.pop(0)
         return postfix
 
+    def syntax_tree(self):
+        stack = []
+        postfix = list(self.infix_postfix())
+
+        for char in postfix:
+            if char.isalnum():
+                stack.insert(0, Nodo(char))
+            elif char in ['+', '*', '?']:
+                node = stack.pop(0)
+                stack.insert(0, Nodo(char, node))
+            elif char in list(self.sims.keys()) and char not in ['+', '*', '?']:
+                node1 = stack.pop(0)
+                node2 = stack.pop(0)
+                stack.insert(0, Nodo(char, node2, node1))
+
+        return stack.pop(0)
+
+
 compi = Compilador("(a|b)*abb")
-print(compi.infix_postfix())
+compi.syntax_tree()
