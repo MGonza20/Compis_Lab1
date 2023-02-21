@@ -1,56 +1,60 @@
 
-from treeComponents import Nodo
 
 class Compilador:
     def __init__(self, regex):
         self.regex = regex
-        self.sims = {'(': 1, '|': 2, '.': 3, '*': 4, '+': 4, '?': 5}
+        self.sims = {'(': 1, '|': 2, '.': 3, '*': 4, '+': 4, '?': 4}
+        self.statesNo = 0
+
 
     def concat(self):
-        newRegex = ""
-        for i in range(len(self.regex)):
-            value_i = self.regex[i]
-            if (i+1 < len(self.regex)):
-                value_ip1 = self.regex[i+1]
-                newRegex += value_i
+        newRegex, ops = "", list(self.sims.keys())
+        ops.remove('(')
 
-                if (value_i != "(" \
-                    and value_ip1 != ")" \
-                    and value_i != '|' \
-                    and value_ip1 not in list(self.sims.keys())):
-                        newRegex += '.'
+        for i in range(len(self.regex)):
+            val = self.regex[i]
+            if i+1 < len(self.regex):
+                val_p1 = self.regex[i+1]
+                newRegex += val
+
+                if val != '(' and val_p1 != ')' \
+                   and val != '|' \
+                   and val_p1 not in ops:
+                    newRegex += '.'
+
         newRegex += self.regex[-1]
         return newRegex
 
-    def infix_postfix(self):
-        postfix, stack = "", []
-        concatExp = self.concat()
 
-        for value in concatExp:
+    def prec(self, value):
+        return 5 if value.isalnum() else self.sims[value]
+
+
+    def infixPostfix(self):
+        postfix, stack = '', []
+        concatRegex = self.concat()
+
+        for value in concatRegex:
             if value == '(':
                 stack.append(value)
 
             elif value == ')':
-                while stack[0] != '(':
-                    poppedValue = stack.pop(0)
-                    postfix += poppedValue
-                stack.pop(0)
-            else:
-                while stack:
-                    topValKey = stack[0]
-                    topVal = 5 if topValKey.isalnum() else self.sims[topValKey]
-                    cValue = 5 if value.isalnum() else self.sims[value]
+                while stack[-1] != '(':
+                    postfix += stack.pop()
+                stack.pop()
 
-                    if topVal >= cValue:
-                        poppedValue = stack.pop(0)
-                        postfix += poppedValue
-                    else:
-                        break
-                stack.insert(0, value)
+            else:
+                while stack and self.prec(stack[-1]) >= self.prec(value):
+                    postfix += stack.pop()
+                stack.append(value)
+                
         while stack:
-            postfix += stack.pop(0)
+            postfix += stack.pop()
         return postfix
 
 
-compi = Compilador("a?(b?)?b") 
-print(compi.infix_postfix())
+
+
+
+compi = Compilador("0?(1?)?0*") 
+print(compi.infixPostfix())
