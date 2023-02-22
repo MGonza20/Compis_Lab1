@@ -2,7 +2,6 @@
 
 from thompsonTools.Bridge import Bridge
 import pydot
-import graphviz
 
 import os
 os.environ["PATH"] += os.pathsep + 'C:/Program Files (x86)/Graphviz/bin'    
@@ -72,22 +71,28 @@ class Compilador:
                 
                 # Generando transicion
                 transitions = {}
-                transitions[self.statesNo] = {value: [self.statesNo+1]}
+                transitions[start] = {value: [end]}
                 
                 stack.append(Bridge(start, end, transitions))
                 self.statesNo += 2
 
             elif value == '.':
-                # Obteniendo los dos ultimos elementos de la pila
+                # # Obteniendo los dos ultimos elementos de la pila
                 el2 = stack.pop()
                 el1 = stack.pop()
                 el1.trs.update(el2.trs)
 
-                # Generando transicion
-                el1.trs[el1.end] = {'ε': [el2.start]}
-
+                for k, v in el1.trs.items():    
+                    for el in v.values():
+                        if el1.end in el:
+                            dict1 = el1.trs[k]
+                            key = list(dict1.keys())[0]
+                            change = el1.trs[k][key].index(el1.end)
+                            el1.trs[k][key][change] = el2.start
+                            
                 # Creando nuevo estado
                 stack.append(Bridge(el1.start, el2.end, el1.trs))
+                
 
             elif value == '|':
                 # Obteniendo los dos ultimos elementos de la pila
@@ -141,7 +146,7 @@ class Compilador:
                     
                 # Generando transicion
                 transitions = {}
-                transitions[self.statesNo] = {'ε': [self.statesNo+1]}
+                transitions[start] = {'ε': [end]}
                 self.statesNo += 2
                 
                 el1 = stack.pop()
@@ -159,7 +164,7 @@ class Compilador:
                 stack.append(Bridge(start, end, el1.trs))
                 self.statesNo += 2
 
-        return stack.pop().trs
+        return stack.pop()
 
 
     def graph_myt(self):
@@ -167,9 +172,16 @@ class Compilador:
         graph = pydot.Dot(graph_type='digraph', strict=True)
         graph.set_rankdir('LR')
 
-        for k, v in myt.items():
+        for k, v in myt.trs.items():
             for k2, v2 in v.items():
                 for i in range(len(v2)):
+                    if k == myt.start:
+                        graph.add_node(pydot.Node(str(k), color='orange'))
+                    if v2[i] == myt.end:
+                        graph.add_node(pydot.Node(str(v2[i]), shape='doublecircle'))
+                    else:
+                        graph.add_node(pydot.Node(str(v2[i])))
+
                     graph.add_edge(pydot.Edge(str(k), str(v2[i]), label=k2))
         
         graph.write_png('output.png', encoding='utf-8')
@@ -180,5 +192,5 @@ class Compilador:
 
 
 # compi = Compilador("0?(1?)?0*") 
-compi = Compilador("a?(b?)?a*")
+compi = Compilador("ab*ab*")
 compi.graph_myt()
