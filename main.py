@@ -105,10 +105,8 @@ class Compilador:
 
                 # Generando transicion
                 start = self.statesNo
-                self.statesNo += 1
-
                 end = self.statesNo + 1
-                self.statesNo += 1
+                self.statesNo += 2
 
                 el1.trs[start] = {'ε': [el1.start, end]}
                 el1.trs[el1.end] = {'ε': [el1.start, end]}
@@ -163,5 +161,5 @@ class Compilador:
 
 
 # compi = Compilador("0?(1?)?0*") 
-compi = Compilador("a?(b?)")
+compi = Compilador("a?(b?)?a*")
 print(compi.MYT())
