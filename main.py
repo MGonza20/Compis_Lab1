@@ -1,6 +1,11 @@
 
 
 from thompsonTools.Bridge import Bridge
+import pydot
+import graphviz
+
+import os
+os.environ["PATH"] += os.pathsep + 'C:/Program Files (x86)/Graphviz/bin'    
 
 class Compilador:
     def __init__(self, regex):
@@ -27,8 +32,10 @@ class Compilador:
         newRegex += self.regex[-1]
         return newRegex
 
+
     def prec(self, value):
         return 5 if value.isalnum() else self.sims[value]
+
 
     def infixPostfix(self):
         postfix, stack = '', []
@@ -151,10 +158,22 @@ class Compilador:
                 # Creando nuevo estado
                 stack.append(Bridge(start, end, el1.trs))
                 self.statesNo += 2
-                
-
 
         return stack.pop().trs
+
+
+    def graph_myt(self):
+        myt = self.MYT()
+        graph = pydot.Dot(graph_type='digraph', strict=True)
+        graph.set_rankdir('LR')
+
+        for k, v in myt.items():
+            for k2, v2 in v.items():
+                for i in range(len(v2)):
+                    graph.add_edge(pydot.Edge(str(k), str(v2[i]), label=k2))
+        
+        graph.write_png('output.png', encoding='utf-8')
+
 
 
 
@@ -162,4 +181,4 @@ class Compilador:
 
 # compi = Compilador("0?(1?)?0*") 
 compi = Compilador("a?(b?)?a*")
-print(compi.MYT())
+compi.graph_myt()
