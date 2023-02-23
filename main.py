@@ -11,6 +11,7 @@ class Compilador:
         print("2. Salir\n")
     
     def run(self):
+        print("\n¡Bienvenido al primer lab del dragon!\n")
         while True:
             self.menu()
             option = input("Opcion: ")
@@ -18,7 +19,7 @@ class Compilador:
             if option == "1":
                 string = input("Ingrese la expresion regular: ")
                 syntax = Syntax(string)
-                if syntax.checkParenthesis() and syntax.checkOperator():
+                if syntax.checkParenthesis() and syntax.checkOperator() and syntax.checkOperatorValid():
                     a = AFN(string)
                     a.graph_myt()
                 else:

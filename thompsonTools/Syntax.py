@@ -29,8 +29,7 @@ class Syntax:
 
     def checkOperatorValid(self):
         for i in range(len(self.string)):
-            if self.string[i] in self.sims.keys():
-                if i+1 == len(self.string):
-                    return False
+            if not self.string[i].isalnum() and self.string[i] not in self.sims.keys() and self.string[i] != ')':
+                return False
         return True
 
