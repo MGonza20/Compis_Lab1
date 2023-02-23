@@ -22,8 +22,9 @@ class Syntax:
     def checkOperator(self):
         for i in range(len(self.string)):
             if self.string[i] in self.sims.keys():
-                if i == 0:
-                    return False
+                if self.string[i] != '(':
+                    if i == 0:
+                        return False
         return True
 
 
@@ -32,4 +33,3 @@ class Syntax:
             if not self.string[i].isalnum() and self.string[i] not in self.sims.keys() and self.string[i] != ')':
                 return False
         return True
-

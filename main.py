@@ -27,7 +27,7 @@ class Compilador:
             elif option == "2":
                 break
             else:
-                print("Opcion incorrecta\n")
+                print("Opcion incorrecta, vuelva a ingresar nuevamente\n")
 
 if __name__ == "__main__":
     c = Compilador()
