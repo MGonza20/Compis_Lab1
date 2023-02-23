@@ -137,7 +137,7 @@ class AFN:
                 # Se genera una transicion epsilon desde un nuevo estado inicial 
                 # hacia un nuevo estado final 
                 transitions = {}
-                transitions[start] = {value: [end]}
+                transitions[start] = {'ε': [end]}
                 
                 el1 = stack.pop()
                 el2 = Bridge(start, end, transitions)
