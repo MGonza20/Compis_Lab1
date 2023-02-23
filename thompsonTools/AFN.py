@@ -69,9 +69,11 @@ class AFN:
                 end = self.statesNo + 1
                 
                 # Dado que para la union ... 
-                el1.trs[start] = {'ε': [el1.start, el2.start]}
-                el1.trs[el1.end] = {'ε': [end]}
-                el1.trs[el2.end] = {'ε': [end]}
+                el1.trs.update({
+                    start: {'ε': [el1.start, el2.start]},
+                    el1.end: {'ε': [end]},
+                    el2.end: {'ε': [end]}
+                })
 
                 # Creando nuevo estado
                 stack.append(Bridge(start, end, el1.trs))
@@ -86,8 +88,10 @@ class AFN:
                 end = self.statesNo + 1
                 self.statesNo += 2
 
-                el1.trs[start] = {'ε': [el1.start, end]}
-                el1.trs[el1.end] = {'ε': [el1.start, end]}
+                el1.trs.update({
+                    start: {'ε': [el1.start, end]},
+                    el1.end: {'ε': [el1.start, end]}
+                })
 
                 # Creando nuevo transicion
                 stack.append(Bridge(start, end, el1.trs))
@@ -99,8 +103,10 @@ class AFN:
                 # Generando transicion
                 start = self.statesNo
                 end = self.statesNo + 1
-                el1.trs[start] = {'ε': [el1.start]}
-                el1.trs[el1.end] = {'ε': [el1.start, end]}
+                el1.trs.update({
+                    start: {'ε': [el1.start]},
+                    el1.end: {'ε': [el1.start, end]}
+                })
 
                 # Creando nuevo estado
                 stack.append(Bridge(start, end, el1.trs))
@@ -122,9 +128,11 @@ class AFN:
                 # Generando transicion
                 start = self.statesNo
                 end = self.statesNo + 1
-                el1.trs[start] = {'ε': [el1.start, el2.start]}
-                el1.trs[el1.end] = {'ε': [end]}
-                el1.trs[el2.end] = {'ε': [end]}
+                el1.trs.update({
+                    start: {'ε': [el1.start, el2.start]},
+                    el1.end: {'ε': [end]},
+                    el2.end: {'ε': [end]}
+                })
 
                 # Creando nuevo estado
                 stack.append(Bridge(start, end, el1.trs))
