@@ -11,7 +11,7 @@ class Compilador:
         print("2. Salir\n")
     
     def run(self):
-        print("\n¡Bienvenido al primer lab del dragon!\n")
+        print("\n¡Bienvenid@ a la primer aventura del dragon!\n")
         while True:
             self.menu()
             option = input("Opcion: ")
@@ -25,6 +25,7 @@ class Compilador:
                 else:
                     print("Expresion regular incorrecta\n")
             elif option == "2":
+                print("¡Hasta luego!\n")
                 break
             else:
                 print("Opcion incorrecta, vuelva a ingresar nuevamente\n")

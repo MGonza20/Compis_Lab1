@@ -40,6 +40,7 @@ class AFN:
                 # # Obteniendo los dos ultimos elementos de la pila
                 el2 = stack.pop()
                 el1 = stack.pop()
+
                 # Se realiza la union de los dos diccionarios para tomar 
                 # en cuenta todas las transiciones
                 el1.trs.update(el2.trs)
@@ -64,11 +65,14 @@ class AFN:
                 el1 = stack.pop()
                 el1.trs.update(el2.trs)
 
-                # Generando transicion
                 start = self.statesNo
                 end = self.statesNo + 1
                 
-                # Dado que para la union ... 
+                # Caso: Union
+                # Se crea un nuevo estado inicial con transicion epsilon a los dos estados iniciales
+                # de los elementos del stack
+                # y se crea una transicion epsilon de los estados finales de cada elemento del stack
+                # hacia un nuevo estado final
                 el1.trs.update({
                     start: {'ε': [el1.start, el2.start]},
                     el1.end: {'ε': [end]},
@@ -83,11 +87,16 @@ class AFN:
                 # Obteniendo el ultimo elemento de la pila
                 el1 = stack.pop()
 
-                # Generando transicion
                 start = self.statesNo
                 end = self.statesNo + 1
                 self.statesNo += 2
 
+                # Caso: Cerradura de Kleene
+                # Se crea un nuevo estado inicial hacia el estado inicial del elemento del 
+                # stack con transicion epsilon y tambien hacia un nuevo estado final
+
+                # Se crea una transicion epsilon desde el estado final del elemento del stack
+                # hacia su estado inicial y tambien hacia el nuevo estado final
                 el1.trs.update({
                     start: {'ε': [el1.start, end]},
                     el1.end: {'ε': [el1.start, end]}
@@ -99,10 +108,14 @@ class AFN:
             elif value == '+':
                 # Obteniendo el ultimo elemento de la pila
                 el1 = stack.pop()
-
-                # Generando transicion
                 start = self.statesNo
                 end = self.statesNo + 1
+
+                # Caso: Cerradura positiva
+                # Se crea un nuevo estado inicial hacia el estado inicial del elemento del
+                # stack con transicion epsilon, además sd genera una transicion epsilon desde
+                # el estado final del elemento del stack hacia su estado inicial y hacia el
+                # nuevo estado final 
                 el1.trs.update({
                     start: {'ε': [el1.start]},
                     el1.end: {'ε': [el1.start, end]}
@@ -115,17 +128,22 @@ class AFN:
             elif value == '?':
                 start = self.statesNo
                 end = self.statesNo + 1
-                    
-                # Generando transicion
-                transitions = {}
-                transitions[start] = {'ε': [end]}
                 self.statesNo += 2
+
+                # Caso: ?
+                # Dado que ? se refiere a que el caracter puede o no estar presente
+                # o bien en otra representacion se refiere a: (caracter|ε)
+
+                # Se genera una transicion epsilon desde un nuevo estado inicial 
+                # hacia un nuevo estado final 
+                transitions = {}
+                transitions[start] = {value: [end]}
                 
                 el1 = stack.pop()
                 el2 = Bridge(start, end, transitions)
                 el1.trs.update(el2.trs)
 
-                # Generando transicion
+                # Se realiza el mismo proceso que en el caso de la union
                 start = self.statesNo
                 end = self.statesNo + 1
                 el1.trs.update({
