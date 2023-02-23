@@ -139,10 +139,3 @@ class AFN:
         graph.write_png('output.png', encoding='utf-8')
 
 
-
-
-
-# compi = Compilador("ab*ab*") 
-# compi.graph_myt()
-# print(compi.checkOperators('a'))
-
