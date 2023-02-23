@@ -1,6 +1,5 @@
 
 
-
 class Syntax:
     def __init__(self, string): 
         self.string = string

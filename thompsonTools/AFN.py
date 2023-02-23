@@ -25,17 +25,27 @@ class AFN:
                 
                 # Generando transicion
                 transitions = {}
+                # Formato: {estado inicial: {simbolo: [estado final]}}
+                # Ejemplo: {0: {'a': [1]}}
+                # Cuando se trata de un caracter solo hay un estado final e inicial
                 transitions[start] = {value: [end]}
                 
+                # Se crea un objeto de tipo Bridge que es la transicion 
+                # del caracter
                 stack.append(Bridge(start, end, transitions))
+                # Dado que se crearon dos estados se aumenta el contador en dos
                 self.statesNo += 2
 
             elif value == '.':
                 # # Obteniendo los dos ultimos elementos de la pila
                 el2 = stack.pop()
                 el1 = stack.pop()
+                # Se realiza la union de los dos diccionarios para tomar 
+                # en cuenta todas las transiciones
                 el1.trs.update(el2.trs)
 
+                # El objetivo de este ciclo es reemplazar el estado final
+                # del primer elemento por el estado inicial del segundo
                 for k, v in el1.trs.items():    
                     for el in v.values():
                         if el1.end in el:
@@ -57,6 +67,8 @@ class AFN:
                 # Generando transicion
                 start = self.statesNo
                 end = self.statesNo + 1
+                
+                # Dado que para la union ... 
                 el1.trs[start] = {'ε': [el1.start, el2.start]}
                 el1.trs[el1.end] = {'ε': [end]}
                 el1.trs[el2.end] = {'ε': [end]}
