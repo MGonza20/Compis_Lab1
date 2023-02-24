@@ -38,3 +38,14 @@ class Syntax:
             if(self.string[i] == '.'):
                 return False
         return True
+    
+    def checkMultU(self):
+        count = 0
+        for c in self.string:
+            if c == '|':
+                count += 1
+                if count >= 2:
+                    return True
+            else:
+                count = 0
+    
