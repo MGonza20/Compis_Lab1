@@ -32,3 +32,9 @@ class Syntax:
             if not self.string[i].isalnum() and self.string[i] not in self.sims.keys() and self.string[i] != ')':
                 return False
         return True
+    
+    def checkDot(self):
+        for i in range(len(self.string)):
+            if(self.string[i] == '.'):
+                return False
+        return True

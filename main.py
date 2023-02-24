@@ -19,7 +19,7 @@ class Compilador:
             if option == "1":
                 string = input("Ingrese la expresion regular: ")
                 syntax = Syntax(string)
-                if syntax.checkParenthesis() and syntax.checkOperator() and syntax.checkOperatorValid():
+                if syntax.checkParenthesis() and syntax.checkDot() and syntax.checkOperator() and syntax.checkOperatorValid():
                     a = AFN(string)
                     a.graph_myt()
                 else:
