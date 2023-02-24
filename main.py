@@ -7,7 +7,7 @@ class Compilador:
         pass
 
     def menu(self):
-        print("1. AFN")
+        print("1. Regex a AFN")
         print("2. Salir\n")
     
     def run(self):
@@ -28,7 +28,7 @@ class Compilador:
                 print("¡Hasta luego!\n")
                 break
             else:
-                print("Opcion incorrecta, vuelva a ingresar nuevamente\n")
+                print("Opcion invalida, vuelva a ingresar nuevamente\n")
 
 if __name__ == "__main__":
     c = Compilador()
