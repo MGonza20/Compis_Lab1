@@ -19,7 +19,12 @@ class Compilador:
             if option == "1":
                 string = input("Ingrese la expresion regular: ")
                 syntax = Syntax(string)
-                if syntax.checkParenthesis() and syntax.checkDot() and not syntax.checkMultU() and syntax.checkOperator() and syntax.checkOperatorValid():
+                if string and syntax.checkParenthesis() \
+                   and syntax.checkDot() \
+                   and not syntax.checkMultU() \
+                   and syntax.checkOperator() \
+                   and syntax.checkOperatorValid() \
+                   and syntax.checkLastNotU():
                     a = AFN(string)
                     a.graph_myt()
                 else:

@@ -33,12 +33,14 @@ class Syntax:
                 return False
         return True
     
+    
     def checkDot(self):
         for i in range(len(self.string)):
             if(self.string[i] == '.'):
                 return False
         return True
     
+
     def checkMultU(self):
         count = 0
         for c in self.string:
@@ -48,4 +50,9 @@ class Syntax:
                     return True
             else:
                 count = 0
+
+    def checkLastNotU(self):
+        if self.string[-1] == '|':
+            return False
+        return True
     
